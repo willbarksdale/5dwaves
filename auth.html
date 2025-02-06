@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>5D Waves - Authentication</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
@@ -77,34 +78,61 @@
         <div class="logo">5D Waves</div>
         
         <!-- Password Reset Form -->
-        <div class="form-container" id="resetForm" style="display: none;">
+        <div class="form-container" id="resetForm">
             <div class="message">Reset Your Password</div>
-            <input type="password" id="password" placeholder="Enter new password" />
-            <input type="password" id="confirmPassword" placeholder="Confirm new password" />
-            <div class="error" id="errorMessage"></div>
+            <div class="input-group">
+                <label for="password">New Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password"
+                    placeholder="Enter new password" 
+                    aria-label="New password"
+                />
+            </div>
+            <div class="input-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input 
+                    type="password" 
+                    id="confirmPassword" 
+                    name="confirmPassword"
+                    placeholder="Confirm new password" 
+                    aria-label="Confirm new password"
+                />
+            </div>
+            <div class="error" id="errorMessage" role="alert"></div>
             <button onclick="resetPassword()">Reset Password</button>
         </div>
 
         <!-- Email Confirmation Container -->
         <div id="confirmContainer" style="display: none;">
             <div class="message">Confirming your email...</div>
-            <div class="error" id="confirmError"></div>
+            <div class="error" id="confirmError" role="alert"></div>
         </div>
 
         <!-- Success Message -->
         <div class="success-container" id="successMessage">
-            <div class="check-mark">✓</div>
+            <div class="check-mark" aria-hidden="true">✓</div>
             <div class="message" id="successTitle"></div>
             <div class="sub-message" id="successText"></div>
         </div>
     </div>
 
     <script>
+        console.log('Script starting...');  // Debug log
+        
         const SUPABASE_URL = 'https://gklyqtwbowfvtoafqhpb.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrbHlxdHdib3dmdnRvYWZxaHBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc2MDc2MDksImV4cCI6MjA1MzE4MzYwOX0.iUbXVCzs7gvxx4mthJ9qXlPrs6rJT4pkVf9LJb_MRb0';
 
         const { createClient } = supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Debug function to log URL parameters
+        function logUrlParams() {
+            console.log('Full URL:', window.location.href);
+            console.log('Search params:', window.location.search);
+            console.log('Hash:', window.location.hash);
+        }
 
         function getUrlParams() {
             const params = new URLSearchParams(window.location.search);
@@ -145,6 +173,8 @@
             const errorElement = document.getElementById('errorMessage');
             const { code } = getUrlParams();
 
+            console.log('Reset password called with code:', code);  // Debug log
+
             if (password !== confirmPassword) {
                 errorElement.textContent = 'Passwords do not match';
                 return;
@@ -157,46 +187,38 @@
                 });
 
                 if (error) {
-                    console.error("Password reset error:", error);
-                    if (error.message.includes('Token expired')) {
-                        errorElement.textContent = 'The reset link has expired. Please request a new one.';
-                    } else if (error.message.includes('Invalid reset link') || error.message.includes('Invalid token')) {
-                        errorElement.textContent = 'Invalid or expired reset link. Please request a new password reset.';
-                    } else if (error.message.includes('User not found')) {
-                        errorElement.textContent = 'User not found. Please request a new password reset.';
-                    } else {
-                        errorElement.textContent = error.message;
-                    }
-                    return;
+                    console.error('Reset error:', error);  // Debug log
+                    throw error;
                 }
 
                 document.getElementById('resetForm').style.display = 'none';
                 document.getElementById('successMessage').style.display = 'block';
-                document.getElementById('successTitle').textContent = 'Password Reset Confirmed!';
-                document.getElementById('successText').innerHTML = 'Your password has been successfully reset.<br>You can now close this window and return to the app to sign in.';
+                document.getElementById('successTitle').textContent = 'Password Reset Successful!';
+                document.getElementById('successText').innerHTML = 'Your password has been reset.<br>You can now close this window and sign in with your new password.';
 
                 setTimeout(() => {
                     window.location.href = 'io.supabase.5dwaves://login';
                 }, 3000);
             } catch (error) {
-                console.error("Password reset catch error:", error);
+                console.error('Caught error:', error);  // Debug log
                 errorElement.textContent = error.message;
             }
         }
 
         window.onload = function() {
+            logUrlParams();  // Debug log
             const { code, token } = getUrlParams();
 
-            console.log("Full URL:", window.location.href);
-            console.log("Code:", code);
-            console.log("Confirmation Token:", token);
-
             if (code) {
+                console.log('Found reset code:', code);  // Debug log
                 document.getElementById('resetForm').style.display = 'block';
+                document.getElementById('errorMessage').textContent = '';
             } else if (token) {
+                console.log('Found confirmation token:', token);  // Debug log
                 document.getElementById('confirmContainer').style.display = 'block';
                 confirmEmail(token);
             } else {
+                console.log('No valid parameters found');  // Debug log
                 document.getElementById('errorMessage').textContent = 'Invalid link. Please request a new one.';
                 document.getElementById('resetForm').style.display = 'none';
             }
