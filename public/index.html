@@ -426,7 +426,7 @@
             <!-- Description -->
             <div>
                 <p class="description">
-                    Raise your consciousness & clear your mind with our new app!
+                    Raise your consciousness. Download our new app!
                 </p>
             </div>
             
@@ -445,7 +445,7 @@
             </div>
             
             <!-- Free Guide Button -->
-            <a href="/checkout-success.html" id="checkoutButton" class="free-download-button">
+            <a href="/success.html" id="checkoutButton" class="free-download-button">
                 Free 528 Hz Frequency Download
             </a>
         </div>
@@ -453,9 +453,9 @@
         <!-- Footer -->
         <footer>
             <div class="footer-links">
-                <a href="/tos" class="footer-link">Terms</a>
-                <a href="/privacy" class="footer-link">Privacy</a>
-                <a href="/support" class="footer-link">Support</a>
+                <a href="/tos.html" class="footer-link">Terms</a>
+                <a href="/privacy.html" class="footer-link">Privacy</a>
+                <a href="/support.html" class="footer-link">Support</a>
             </div>
         </footer>
     </main>
@@ -472,9 +472,6 @@
             if (isIOS) {
                 iosDownloadButton.addEventListener('click', function(e) {
                     e.preventDefault();
-                    
-                    // Try to open the app first
-                    window.location.href = 'fivedwaves://'; 
                     
                     // Set a timeout to redirect to App Store if app doesn't open
                     setTimeout(function() {

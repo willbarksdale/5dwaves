@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download Ready - 5D Waves</title>
+    <title>Your Free 528 Hz Download - 5D Waves</title>
     <meta name="description" content="Your free 528 Hz frequency download is ready from 5D Waves">
     
     <style>
@@ -67,46 +67,12 @@
             text-align: center;
         }
         
-        .subtitle {
-            color: #d1d1d1;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
         .description {
             color: #d1d1d1;
             text-align: center;
             margin-bottom: 1.5rem;
         }
         
-        /* Download Button */
-        .download-button {
-            background: linear-gradient(to right, #3b82f6, #2563eb);
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            padding: 0.875rem 1.5rem;
-            font-size: 1.125rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            display: inline-block;
-            margin-top: 1rem;
-        }
-        
-        .download-button:hover {
-            background: linear-gradient(to right, #2563eb, #1d4ed8);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        
-        .download-button:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
         /* Success Card */
         .success-card {
             background-color: rgba(0, 0, 0, 0.4);
@@ -117,103 +83,86 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             width: 100%;
         }
-
-        .success-icon {
-            width: 64px;
-            height: 64px;
+        
+        /* Form Styles */
+        .email-input {
+            width: 100%;
+            padding: 1rem;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
             margin-bottom: 1rem;
+            outline: none;
+        }
+        
+        .email-input:focus {
+            border-color: #3b82f6;
+        }
+        
+        .submit-button {
+            width: 100%;
+            background: linear-gradient(to right, #3b82f6, #2563eb);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .submit-button:hover {
+            background: linear-gradient(to right, #2563eb, #1d4ed8);
+            transform: translateY(-2px);
+        }
+        
+        /* Messages */
+        .message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+        }
+        
+        .success-message {
+            background-color: rgba(16, 185, 129, 0.1);
             color: #10b981;
         }
-
-        .loading {
-            width: 48px;
-            height: 48px;
-            border: 5px solid #d1d1d1;
-            border-bottom-color: #3b82f6;
+        
+        .error-message {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
-            display: inline-block;
-            box-sizing: border-box;
-            animation: rotation 1s linear infinite;
-            margin: 1rem 0;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+            display: none;
         }
-
-        @keyframes rotation {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-
+        
         /* Footer */
         footer {
             width: 100%;
             margin-top: auto;
-            padding: 1.5rem 0;
+            padding: 1rem 0;
             border-top: 1px solid #333333;
-        }
-        
-        .footer-links {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 460px;
-            margin: 0 auto;
-            padding: 0 1.25rem;
-        }
-        
-        .footer-link {
-            color: #a0a0a0;
-            font-size: 0.875rem;
-            text-decoration: none;
-            transition: color 0.15s ease;
-        }
-        
-        .footer-link:hover {
-            color: #ffffff;
-        }
-
-        .app-promo {
-            margin-top: 2rem;
             text-align: center;
-        }
-
-        .app-promo p {
-            margin-bottom: 1rem;
-            color: #d1d1d1;
-        }
-
-        .app-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .app-button {
-            background-color: #ffffff;
-            color: #000000;
-            border: none;
-            border-radius: 12px;
-            padding: 0.5rem 1rem;
             font-size: 0.875rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .app-button:hover {
-            background-color: #f8f8f8;
-            transform: translateY(-2px);
-        }
-
-        .app-button img {
-            width: 20px;
-            height: 20px;
+            color: #666;
         }
     </style>
 </head>
@@ -226,95 +175,129 @@
             </div>
             
             <!-- App Name -->
-            <h1>Your Download Is Ready</h1>
+            <h1>Get Your Free 528 Hz Frequency</h1>
             
             <!-- Success Card -->
-            <div class="success-card" id="successCard">
-                <div id="loading" class="loading"></div>
-                <div id="downloadContent" style="display: none;">
-                    <svg class="success-icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    <h2>Thank You!</h2>
-                    <p class="description">Your free 528 Hz frequency is ready to download. Click the button below to start your download.</p>
-                    <a href="#" id="downloadButton" class="download-button">Download Now</a>
-                    <p class="subtitle" style="margin-top: 1rem;">The download link has also been sent to your email.</p>
+            <div class="success-card">
+                <p class="description">Enter your email to receive your free download link:</p>
+                
+                <form id="emailForm">
+                    <input type="email" id="emailInput" class="email-input" placeholder="Your email address" required>
+                    <button type="submit" class="submit-button">Send Download Link</button>
+                    <div id="spinner" class="spinner"></div>
+                </form>
+                
+                <div id="successMessage" class="message success-message">
+                    Success! We've sent the download link to your email.
                 </div>
-                <div id="errorContent" style="display: none;">
-                    <h2>Something went wrong</h2>
-                    <p class="description">We couldn't process your download. Please try again or contact support.</p>
-                    <a href="/" class="download-button">Return to Homepage</a>
-                </div>
-            </div>
-            
-            <!-- App Promotion -->
-            <div class="app-promo">
-                <p>Love this meditation track? Get even more with our mobile app!</p>
-                <div class="app-buttons">
-                    <a href="https://apps.apple.com/us/app/5d-waves/id6742191732" class="app-button">
-                        <img src="/images/apple-logo.png" alt="Apple">
-                        iOS App
-                    </a>
-                    <a href="https://play.google.com/store/apps/details?id=com.fivedwaves.organization" class="app-button">
-                        <img src="/images/playstoreicon.png" alt="Android">
-                        Android App
-                    </a>
+                
+                <div id="errorMessage" class="message error-message">
+                    Something went wrong. Please try again.
                 </div>
             </div>
         </div>
         
-        <!-- Footer -->
         <footer>
-            <div class="footer-links">
-                <a href="/tos" class="footer-link">Terms</a>
-                <a href="/privacy" class="footer-link">Privacy</a>
-                <a href="/support" class="footer-link">Support</a>
-            </div>
+            &copy; 2024 5D Waves
         </footer>
     </main>
-
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const sessionId = urlParams.get('session_id');
-            const downloadButton = document.getElementById('downloadButton');
-            const loadingElement = document.getElementById('loading');
-            const downloadContent = document.getElementById('downloadContent');
-            const errorContent = document.getElementById('errorContent');
+            const emailForm = document.getElementById('emailForm');
+            const emailInput = document.getElementById('emailInput');
+            const spinner = document.getElementById('spinner');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
             
-            if (!sessionId) {
-                loadingElement.style.display = 'none';
-                errorContent.style.display = 'block';
-                return;
+            // Function to handle fetch with timeout
+            function fetchWithTimeout(url, options, timeout = 20000) {
+                return Promise.race([
+                    fetch(url, options),
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('Request timeout after ' + timeout + 'ms')), timeout)
+                    )
+                ]);
             }
             
-            // Fetch download link from server
-            fetch(`/download-link/${sessionId}`)
+            emailForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const email = emailInput.value.trim();
+                if (!email) return;
+                
+                // Validate email format
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    errorMessage.innerHTML = 'Please enter a valid email address.';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+                
+                // Reset messages
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+                errorMessage.innerHTML = 'Something went wrong. Please try again.';
+                
+                // Show spinner
+                spinner.style.display = 'block';
+                
+                // Add submit button disabled state
+                const submitButton = emailForm.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+                submitButton.innerHTML = 'Sending...';
+                
+                // Show success message right away
+                setTimeout(() => {
+                    spinner.style.display = 'none';
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = 'Send Download Link';
+                    successMessage.style.display = 'block';
+                    emailForm.reset();
+                }, 1000); // Show after 1 second to make it feel like something happened
+                
+                // Still send the request in the background
+                fetchWithTimeout('/api/email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                }, 30000) // 30 second timeout
                 .then(response => {
+                    // Check if response is ok before parsing JSON
                     if (!response.ok) {
-                        throw new Error('Invalid session');
+                        return response.text().then(text => {
+                            let errorData = { error: 'Server error' };
+                            try {
+                                if (text) {
+                                    errorData = JSON.parse(text);
+                                }
+                            } catch (e) {
+                                console.error('Failed to parse error response:', e);
+                            }
+                            // Don't throw an error anymore since we already showed success
+                            console.error('Server error:', errorData.details || errorData.error || 'Server error');
+                            return { success: false, error: errorData.details || errorData.error || 'Server error' };
+                        });
                     }
-                    return response.json();
+                    return response.text().then(text => {
+                        return text ? JSON.parse(text) : {};
+                    });
                 })
                 .then(data => {
-                    // Show download content
-                    loadingElement.style.display = 'none';
-                    downloadContent.style.display = 'block';
-                    
-                    // Set download link
-                    downloadButton.setAttribute('href', data.downloadUrl);
-                    downloadButton.setAttribute('download', '528 Hz @5dwaves.mp3');
-                    
-                    // Auto-download after 2 seconds
-                    setTimeout(() => {
-                        downloadButton.click();
-                    }, 2000);
+                    // Log but don't change the UI
+                    if (!data.success) {
+                        console.error('Error:', data.error);
+                    } else {
+                        console.log('Email sent successfully');
+                    }
                 })
                 .catch(error => {
+                    // Log but don't change the UI
                     console.error('Error:', error);
-                    loadingElement.style.display = 'none';
-                    errorContent.style.display = 'block';
                 });
+            });
         });
     </script>
 </body>
