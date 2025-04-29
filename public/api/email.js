@@ -3,8 +3,6 @@
 
 // Required dependencies
 import nodemailer from 'nodemailer';
-import path from 'path';
-import fs from 'fs';
 
 export default async function handler(req, res) {
   // Set CORS headers for cross-origin requests
@@ -40,6 +38,9 @@ export default async function handler(req, res) {
       }
     });
     
+    // The public URL of the zip file
+    const downloadUrl = 'https://5dwaves.com/downloads/528%20Hz.zip';
+    
     // Configure email options
     const mailOptions = {
       from: '"5D Waves" <will@5dwaves.com>',
@@ -54,16 +55,19 @@ export default async function handler(req, res) {
 
         <p>Gratitude,<br>
         Will @ 5D Waves</p>
+        
+        <p>If the attachment doesn't come through, you can also download directly from <a href="${downloadUrl}">this link</a>.</p>
       `,
       attachments: [
         {
           filename: '528Hz.zip',
-          path: path.join(process.cwd(), 'public', 'downloads', '528 Hz.zip')
+          href: downloadUrl,
+          contentType: 'application/zip'
         }
       ]
     };
     
-    // In development mode without actual file, simulate success
+    // In development mode, simulate success
     if (process.env.NODE_ENV === 'development') {
       console.log('Development mode: Simulating email send success');
       return res.status(200).json({ 
@@ -71,6 +75,8 @@ export default async function handler(req, res) {
         message: 'File would be sent to ' + email + ' (simulated)' 
       });
     }
+    
+    console.log('Sending email to:', email);
     
     // Send the email
     const info = await transport.sendMail(mailOptions);
