@@ -3,6 +3,8 @@
 
 // Required dependencies
 import nodemailer from 'nodemailer';
+import https from 'https';
+import { Readable } from 'stream';
 
 export default async function handler(req, res) {
   // Set CORS headers for cross-origin requests
@@ -28,7 +30,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Email is required' });
     }
     
-    // Set up SMTP transport
+    console.log('Setting up SMTP transport with ZeptoMail');
+    
+    // Set up SMTP transport with ZeptoMail
     const transport = nodemailer.createTransport({
       host: "smtp.zeptomail.com",
       port: 587,
@@ -38,58 +42,68 @@ export default async function handler(req, res) {
       }
     });
     
-    // The public URL of the zip file
-    const downloadUrl = 'https://5dwaves.com/downloads/528%20Hz.zip';
+    // The URL of the zip file
+    const fileUrl = 'https://5dwaves.com/downloads/528%20Hz.zip';
     
-    // Configure email options
-    const mailOptions = {
-      from: '"5D Waves" <will@5dwaves.com>',
-      to: email,
-      subject: "Your Free Download From 5D Waves",
-      html: `
-        <p>Hello,</p>
+    console.log('Fetching zip file from:', fileUrl);
+    
+    // Fetch the zip file and send it as an attachment
+    https.get(fileUrl, async (fileResponse) => {
+      if (fileResponse.statusCode !== 200) {
+        console.error('Failed to fetch zip file:', fileResponse.statusCode);
+        return res.status(500).json({ error: 'Failed to fetch attachment file' });
+      }
+      
+      // Configure email options
+      const mailOptions = {
+        from: '"5D Waves" <will@5dwaves.com>',
+        to: email,
+        subject: "Your Free Download From 5D Waves",
+        html: `
+          <p>Hello,</p>
 
-        <p>Your free download is attached to this email.</p>
-        
-        <p>Save to your device & listen at a comfortable volume as needed to clear your mind!</p>
+          <p>Your free download is attached to this email.</p>
+          
+          <p>Save to your device & listen at a comfortable volume as needed to clear your mind!</p>
 
-        <p>Gratitude,<br>
-        Will @ 5D Waves</p>
+          <p>Gratitude,<br>
+          Will @ 5D Waves</p>
+          
+          <p>If the attachment doesn't come through, you can also download directly from <a href="${fileUrl}">this link</a>.</p>
+        `,
+        attachments: [
+          {
+            filename: '528Hz.zip',
+            content: fileResponse
+          }
+        ]
+      };
+      
+      console.log('Sending email to:', email);
+      
+      try {
+        // Send the email
+        const info = await transport.sendMail(mailOptions);
+        console.log('Email sent successfully:', info.messageId);
         
-        <p>If the attachment doesn't come through, you can also download directly from <a href="${downloadUrl}">this link</a>.</p>
-      `,
-      attachments: [
-        {
-          filename: '528Hz.zip',
-          href: downloadUrl,
-          contentType: 'application/zip'
-        }
-      ]
-    };
-    
-    // In development mode, simulate success
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Development mode: Simulating email send success');
-      return res.status(200).json({ 
-        success: true, 
-        message: 'File would be sent to ' + email + ' (simulated)' 
-      });
-    }
-    
-    console.log('Sending email to:', email);
-    
-    // Send the email
-    const info = await transport.sendMail(mailOptions);
-    
-    console.log('Email sent: %s', info.messageId);
-    
-    return res.status(200).json({ 
-      success: true, 
-      message: 'File sent successfully to ' + email 
+        return res.status(200).json({ 
+          success: true, 
+          message: 'File sent successfully to ' + email 
+        });
+      } catch (emailError) {
+        console.error('Error sending email:', emailError);
+        return res.status(500).json({ 
+          error: 'Error sending email', 
+          details: emailError.message 
+        });
+      }
+    }).on('error', (err) => {
+      console.error('Error fetching attachment:', err);
+      return res.status(500).json({ error: 'Error fetching attachment', details: err.message });
     });
     
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('Server error:', error);
     return res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 } 
