@@ -1,0 +1,106 @@
+function onFormSubmit(e) {
+  try {
+    // Explicitly specify which spreadsheet to use
+    var spreadsheetId = "1gO0BMyBeAyaryASUoBLdXTmIA0J1-cizrKL_pAD46pU";
+    var spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+    var sheet = spreadsheet.getSheets()[0]; // Gets the first sheet
+    
+    var lastRow = sheet.getLastRow();
+    
+    // Skip header row - make sure we're not processing row 1 (headers)
+    if (lastRow <= 1) {
+      Logger.log("No data rows found in the spreadsheet");
+      return; // Exit if only headers exist
+    }
+    
+    // Process the last row with actual data (not the header row)
+    var row = lastRow;
+    
+    Logger.log("Processing row: " + row);
+    
+    // Adjust these to match your column structure
+    var timestamp = sheet.getRange(row, 1).getValue();  // Column A is Timestamp
+    var email = sheet.getRange(row, 2).getValue();      // Column B is Email
+    var name = sheet.getRange(row, 3).getValue();       // Column C is Name
+    
+    Logger.log("Processing submission for: " + name + " at email: " + email);
+    
+    // Email settings
+    var subject = "Your 5D Waves Free Download";
+    var downloadLink = "https://5dwaves.com/downloads/528%20Hz%20@5dwaves.mp3";
+    
+    // Create email body
+    var body = "Hello " + name + ",\n\n" +
+              "Thank you for requesting the 5D Waves free download!\n\n" +
+              "You can download your free audio here: " + downloadLink + "\n\n" +
+              "Save it to your device and listen at a comfortable volume whenever you need to clear your mind.\n\n" +
+              "Gratitude,\n" +
+              "Will @ 5D Waves";
+    
+    // Send email
+    MailApp.sendEmail({
+      to: email,
+      subject: subject,
+      body: body
+    });
+    
+    Logger.log("Email sent to: " + email);
+    return "Email sent successfully to: " + email;
+  } catch (error) {
+    Logger.log("Error occurred: " + error.toString());
+    return "Error: " + error.toString();
+  }
+}
+
+// Function to test manually sending email to the last form submitter
+function testSendLatestEmail() {
+  return onFormSubmit(null);
+}
+
+// Function to send a test email to a specific address
+function sendTestEmail() {
+  var testEmail = Session.getActiveUser().getEmail(); // Your email
+  var subject = "Your 5D Waves Free Download";
+  var downloadLink = "https://5dwaves.com/downloads/528%20Hz%20@5dwaves.mp3";
+  
+  var body = "Hello Test User,\n\n" +
+            "Thank you for requesting the 5D Waves free download!\n\n" +
+            "You can download your free audio here: " + downloadLink + "\n\n" +
+            "Save it to your device and listen at a comfortable volume whenever you need to clear your mind.\n\n" +
+            "Gratitude,\n" +
+            "Will @ 5D Waves";
+  
+  try {
+    MailApp.sendEmail({
+      to: testEmail,
+      subject: subject,
+      body: body
+    });
+    return "Test email sent to: " + testEmail;
+  } catch (error) {
+    return "Error sending test email: " + error.toString();
+  }
+}
+
+// Function to set up the form submission trigger
+function setUpTrigger() {
+  // Delete any existing triggers
+  var triggers = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < triggers.length; i++) {
+    ScriptApp.deleteTrigger(triggers[i]);
+  }
+  
+  // Create new trigger for form submissions
+  ScriptApp.newTrigger('onFormSubmit')
+    .forSpreadsheet(SpreadsheetApp.openById("1gO0BMyBeAyaryASUoBLdXTmIA0J1-cizrKL_pAD46pU"))
+    .onFormSubmit()
+    .create();
+  
+  var allTriggers = ScriptApp.getProjectTriggers();
+  
+  if (allTriggers.length > 0) {
+    return "Trigger created successfully! Total triggers: " + allTriggers.length;
+  } else {
+    return "Failed to create trigger!";
+  }
+} 

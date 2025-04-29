@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "buildCommand": null,
+  "devCommand": "http-server public -p 8080",
+  "outputDirectory": "public",
+  "github": {
+    "enabled": true,
+    "silent": true
+  },
+  "rewrites": [
+    { "source": "/tos", "destination": "/terms.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/support", "destination": "/support.html" }
+  ],
+  "framework": null
+} 
