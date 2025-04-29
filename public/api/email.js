@@ -1,8 +1,10 @@
-// Serverless function for sending emails via ZeptoMail
+// Serverless function for sending emails via ZeptoMail SMTP
 // This will be deployed as a Vercel serverless function
 
-// Required environment variables:
-// - ZOHO_MAIL_API_TOKEN: Your ZeptoMail API token
+// Required dependencies
+import nodemailer from 'nodemailer';
+import path from 'path';
+import fs from 'fs';
 
 export default async function handler(req, res) {
   // Set CORS headers for cross-origin requests
@@ -28,87 +30,57 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Email is required' });
     }
     
-    // ZeptoMail API URL 
-    const apiUrl = 'https://api.zeptomail.com/v1.1/email';
-    
-    // ZeptoMail API token from environment variables
-    const apiToken = process.env.ZOHO_MAIL_API_TOKEN;
-    
-    if (!apiToken) {
-      console.log('API token not configured, sending simulated success response');
-      // For testing without API token, return success
-      return res.status(200).json({ 
-        success: true, 
-        message: 'Download link would be sent to ' + email + ' (simulated)' 
-      });
-    }
-    
-    // Download URL
-    const downloadUrl = `https://5dwaves.com/downloads/528%20Hz%20@5dwaves.mp3`;
-    
-    // Email content with the download link
-    const emailContent = {
-      from: { 
-        address: "will@5dwaves.com",
-        name: "5D Waves"
-      },
-      to: [
-        {
-          email_address: {
-            address: email,
-            name: "5D Waves Customer"
-          }
-        }
-      ],
-      subject: "Your 528 Hz Frequency Download from 5D Waves",
-      htmlbody: `
-        <p>Hello,</p>
-
-        <p>Thank you for your interest in 5D Waves! Here is your 528 Hz frequency download link:</p>
-
-        <p><a href="${downloadUrl}" style="display: inline-block; padding: 10px 20px; background-color: #2563eb; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">Download Your 528 Hz Frequency</a></p>
-
-        <p>This link will allow you to download the file directly. If the button doesn't work, you can copy and paste this URL into your browser:</p>
-        <p>${downloadUrl}</p>
-
-        <p>Enjoy your meditation experience!</p>
-
-        <p>Best regards,<br>
-        5D Waves Team</p>
-      `,
-      track_opens: true,
-      track_clicks: true
-    };
-    
-    // Send the email using ZeptoMail API
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Zoho-enczapikey ${apiToken}`
-      },
-      body: JSON.stringify(emailContent)
+    // Set up SMTP transport
+    const transport = nodemailer.createTransport({
+      host: "smtp.zeptomail.com",
+      port: 587,
+      auth: {
+        user: "emailapikey",
+        pass: "wSsVR60kqRamBvsvnWL7LudqzVgEAwv/RE1/3VuivnGpHfCQpsc4xUedA1XyGacdFmduFDtH9eh/kE8DhDMM244kzVkAXSiF9mqRe1U4J3x17qnvhDzDXWVdlRKKJYMJwwVsn2NpE8kh+g=="
+      }
     });
     
-    // Parse the response
-    const data = await response.json();
+    // Configure email options
+    const mailOptions = {
+      from: '"5D Waves" <will@5dwaves.com>',
+      to: email,
+      subject: "Your Free Download From 5D Waves",
+      html: `
+        <p>Hello,</p>
+
+        <p>Your free download is attached to this email.</p>
+        
+        <p>Save to your device & listen at a comfortable volume as needed to clear your mind!</p>
+
+        <p>Gratitude,<br>
+        Will @ 5D Waves</p>
+      `,
+      attachments: [
+        {
+          filename: '528Hz.zip',
+          path: path.join(process.cwd(), 'public', 'downloads', '528 Hz.zip')
+        }
+      ]
+    };
     
-    console.log("ZeptoMail API response:", data);
-    
-    // Check if the email was sent successfully
-    if (response.ok && data.status === "success") {
+    // In development mode without actual file, simulate success
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Development mode: Simulating email send success');
       return res.status(200).json({ 
         success: true, 
-        message: 'Download link sent successfully to ' + email 
-      });
-    } else {
-      console.error('ZeptoMail API error:', data);
-      return res.status(500).json({ 
-        error: 'Failed to send email', 
-        details: data 
+        message: 'File would be sent to ' + email + ' (simulated)' 
       });
     }
+    
+    // Send the email
+    const info = await transport.sendMail(mailOptions);
+    
+    console.log('Email sent: %s', info.messageId);
+    
+    return res.status(200).json({ 
+      success: true, 
+      message: 'File sent successfully to ' + email 
+    });
     
   } catch (error) {
     console.error('Error sending email:', error);
