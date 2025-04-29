@@ -188,7 +188,7 @@
                 </form>
                 
                 <div id="successMessage" class="message success-message">
-                    Success! We've sent the download link to your email.
+                    Success! Check your email for your free download.
                 </div>
                 
                 <div id="errorMessage" class="message error-message">
@@ -257,6 +257,7 @@
                 }, 1000); // Show after 1 second to make it feel like something happened
                 
                 // Still send the request in the background
+                console.log('Sending email request to /api/email');
                 fetchWithTimeout('/api/email', {
                     method: 'POST',
                     headers: {
@@ -265,9 +266,11 @@
                     body: JSON.stringify({ email })
                 }, 30000) // 30 second timeout
                 .then(response => {
+                    console.log('Received response:', response.status, response.statusText);
                     // Check if response is ok before parsing JSON
                     if (!response.ok) {
                         return response.text().then(text => {
+                            console.log('Error response text:', text);
                             let errorData = { error: 'Server error' };
                             try {
                                 if (text) {
@@ -282,11 +285,13 @@
                         });
                     }
                     return response.text().then(text => {
+                        console.log('Success response text:', text);
                         return text ? JSON.parse(text) : {};
                     });
                 })
                 .then(data => {
                     // Log but don't change the UI
+                    console.log('Parsed response data:', data);
                     if (!data.success) {
                         console.error('Error:', data.error);
                     } else {
@@ -295,7 +300,7 @@
                 })
                 .catch(error => {
                     // Log but don't change the UI
-                    console.error('Error:', error);
+                    console.error('Error in fetch:', error);
                 });
             });
         });
